@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+
+// The styleguide is a personal reference: reachable at /system while developing
+// (`npm run dev`), and stripped from the production build (see the "build"
+// script in package.json, which removes dist/system after `astro build`).
+
+const colors = [
+  { name: 'ink', hex: '#0f1115', note: 'background' },
+  { name: 'surface', hex: '#141821', note: 'elevated' },
+  { name: 'border', hex: '#23272e', note: 'hairlines' },
+  { name: 'amber', hex: '#f4a838', note: 'accent' },
+  { name: 'text', hex: '#e8ebef', note: 'primary' },
+  { name: 'muted', hex: '#8b939e', note: 'secondary' },
+  { name: 'link', hex: '#6f9be8', note: 'links' },
+  { name: 'index', hex: '#3c4450', note: 'faint' },
+];
+
+const type = [
+  { role: 'display', font: 'Space Grotesk', use: 'headings, UI, nav', cls: 'sp-display' },
+  { role: 'prose', font: 'Source Serif 4', use: 'long-form body', cls: 'sp-prose' },
+  { role: 'mono', font: 'JetBrains Mono', use: 'labels, meta, tags', cls: 'sp-mono' },
+  { role: 'logo', font: 'Poppins', use: 'the wordmark', cls: 'sp-logo' },
+];
+---
+
+<Base title="System" description="The tokens and parts that hold h11t labs together — a lean, terminal-flavored kit.">
+  <section>
+    <p class="kicker"><span class="on">system</span></p>
+    <h1 class="page-title">Design system</h1>
+    <p class="lede">The tokens and parts that hold h11t labs together — a lean, terminal-flavored kit.</p>
+
+    <h2 class="sec-label">logo</h2>
+    <div class="logo-show"><Logo size={64} /></div>
+    <p class="logo-note">
+      Poppins 800 italic + 700 · white h/t · amber 11 · amber period<br />
+      fused stems, keyline strokes
+    </p>
+
+    <h2 class="sec-label">color</h2>
+    <div class="swatches">
+      {colors.map((c) => (
+        <div class="swatch">
+          <div class="swatch__chip" style={`background:${c.hex}`}></div>
+          <div class="swatch__name">{c.name}</div>
+          <div class="swatch__hex">{c.hex}</div>
+        </div>
+      ))}
+    </div>
+
+    <h2 class="sec-label">type</h2>
+    <div class="type-list">
+      {type.map((t) => (
+        <div class="type-row">
+          <div class="type-meta">
+            <span class="type-role">{t.role}</span>
+            <span class="type-font">{t.font}</span>
+            <span class="type-use">{t.use}</span>
+          </div>
+          <div class={`type-sample ${t.cls}`}>Legible tools, built to be read.</div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sec-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 400;
+    margin: 3.5rem 0 1.4rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .logo-show { margin-bottom: 1.4rem; }
+  .logo-note { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin: 0; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+  .swatch__chip { height: 82px; border-radius: 8px; border: 1px solid var(--border); }
+  .swatch__name { font-family: var(--font-display); font-weight: 500; margin-top: 0.6rem; }
+  .swatch__hex { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+
+  .type-list { display: flex; flex-direction: column; }
+  .type-row { padding: 1.4rem 0; border-top: 1px solid var(--border); }
+  .type-row:first-child { border-top: 0; }
+  .type-meta { display: flex; flex-wrap: wrap; gap: 0.8rem; font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 0.7rem; }
+  .type-role { color: var(--amber); }
+  .type-font { color: var(--text); }
+  .type-use { color: var(--index); }
+  .type-sample { font-size: 1.5rem; color: var(--text); }
+  .sp-display { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.02em; }
+  .sp-prose { font-family: var(--font-prose); }
+  .sp-mono { font-family: var(--font-mono); font-size: 1.15rem; }
+  .sp-logo { font-family: var(--font-logo); font-weight: 700; font-style: italic; }
+</style>

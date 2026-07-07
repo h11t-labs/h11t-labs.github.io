@@ -1,0 +1,221 @@
+/* ------------------------------------------------------------------ *
+ *  h11t labs — design system
+ *  Ported from the Claude Design source (h11t labs.dc.html).
+ *  Tokens verified against the project's own "system" styleguide page.
+ * ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: dark;
+  /* color tokens (from the design's /system page) */
+  --ink:     #0f1115;   /* page background            */
+  --surface: #141821;   /* elevated surface / cards   */
+  --border:  #23272e;   /* hairlines, dividers        */
+  --amber:   #f4a838;   /* accent                     */
+  --text:    #e8ebef;   /* primary text / headings    */
+  --muted:   #8b939e;   /* body / secondary text      */
+  --link:    #6f9be8;   /* links (repo handles)       */
+  --index:   #3c4450;   /* faint numerals, keylines   */
+
+  /* type families */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif; /* headings + UI */
+  --font-prose:   "Source Serif 4", Georgia, "Times New Roman", serif;    /* long-form body */
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; /* labels */
+  --font-logo:    "Poppins", var(--font-display);
+
+  /* layout */
+  --sidebar-w: 360px;
+  --content-w: 760px;
+  --gutter: clamp(1.5rem, 4vw, 4rem);
+}
+
+/* ---- light theme ---------------------------------------------------- *
+ * The same eight tokens, retuned for a warm-paper light mode. Applied
+ * automatically when the OS prefers light (unless the toggle has forced a
+ * theme), or explicitly via [data-theme]. Amber deepens to stay legible on
+ * a pale ground; everything else references the tokens, so it just adapts. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --ink:     #faf9f6;
+    --surface: #f1efe8;
+    --border:  #e6e2d8;
+    --amber:   #f4a838;
+    --text:    #17191d;
+    --muted:   #676c66;
+    --link:    #2a61c2;
+    --index:   #b6b1a6;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ink:     #faf9f6;
+  --surface: #ffffff;
+  --border:  #e6e2d8;
+  --amber:   #f4a838;
+  --text:    #17191d;
+  --muted:   #676c66;
+  --link:    #2a61c2;
+  --index:   #b6b1a6;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+body { margin: 0; min-height: 100dvh; }
+
+/* the amber top hairline the design shows above the layout */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--amber);
+  z-index: 100;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* mono eyebrow / kicker: "index / work", "01 — statement" */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  margin: 0 0 1.4rem;
+}
+.kicker .sep { color: var(--index); margin: 0 0.35rem; }
+.kicker .on { color: var(--muted); }
+
+/* big page title (Projects / Writing / About / Design system) */
+.page-title {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+}
+.page-title .num {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.32em;
+  letter-spacing: 0;
+  color: var(--index);
+  vertical-align: middle;
+  margin-left: 0.6rem;
+}
+
+/* section lede */
+.lede {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 46ch;
+  margin: 0;
+}
+
+.muted { color: var(--muted); }
+.faint { color: var(--index); }
+.amber { color: var(--amber); }
+
+/* mono tag pill */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.16rem 0.5rem;
+  line-height: 1.4;
+}
+
+/* mono repo handle link */
+.handle {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--link);
+}
+
+hr { border: 0; border-top: 1px solid var(--border); margin: 0; }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.1em 0.38em;
+}
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+}
+pre code { background: none; border: 0; padding: 0; }
+
+/* Shiki dual-theme syntax highlighting: follow the site theme (dark by default,
+   light when the toggle or the OS asks for it). Token colours come from the
+   --shiki-light / --shiki-dark vars Shiki writes onto every span. */
+.astro-code { color: var(--text); }
+.astro-code span { color: var(--shiki-dark); }
+:root[data-theme="light"] .astro-code span { color: var(--shiki-light); }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .astro-code span { color: var(--shiki-light); }
+}
+
+::selection { background: color-mix(in srgb, var(--amber) 28%, transparent); color: var(--text); }
+
+/* skip link */
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 1rem; top: 1rem; z-index: 200; background: var(--amber); color: #0f1115; padding: .5rem .8rem; border-radius: 6px; }
+
+/* ---- i18n: show the variant matching <html lang>, URLs unchanged ---- */
+[data-i18n-lang] { display: none; }
+html:lang(en) [data-i18n-lang="en"],
+html:lang(nl) [data-i18n-lang="nl"] { display: contents; }
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.55rem 0.95rem;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn--primary { background: var(--amber); color: #0f1115; border-color: var(--amber); }
+.btn--primary:hover { background: #f7b551; }
+.btn--ghost { background: transparent; color: var(--text); border-color: var(--border); }
+.btn--ghost:hover { border-color: var(--muted); }
+/* github button: neutral (black on light, white on dark), never amber */
+.btn--gh { background: transparent; color: var(--text); border-color: color-mix(in srgb, var(--text) 26%, transparent); }
+.btn--gh:hover { border-color: var(--text); background: color-mix(in srgb, var(--text) 7%, transparent); }
+.btn--gh svg { opacity: 0.9; }

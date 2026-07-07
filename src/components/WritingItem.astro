@@ -1,0 +1,50 @@
+---
+interface Props {
+  slug: string;
+  titleEn: string;
+  titleNl: string;
+  descEn: string;
+  descNl: string;
+  readMin: number;
+}
+const { slug, titleEn, titleNl, descEn, descNl, readMin } = Astro.props;
+---
+
+<a class="post" href={`/writing/${slug}`}>
+  <div class="post__meta">
+    <span class="post__time">{readMin} min</span>
+  </div>
+  <h3 class="post__title">
+    <span data-i18n-lang="en">{titleEn}</span><span data-i18n-lang="nl">{titleNl}</span>
+  </h3>
+  <p class="post__desc">
+    <span data-i18n-lang="en">{descEn}</span><span data-i18n-lang="nl">{descNl}</span>
+  </p>
+</a>
+
+<style>
+  .post {
+    display: block;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .post:hover { text-decoration: none; }
+  .post__meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+  .post__time { color: var(--index); }
+  .post__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin: 0 0 0.7rem;
+    transition: color .15s ease;
+  }
+  .post:hover .post__title { color: var(--amber); }
+  .post__desc { color: var(--muted); font-size: 1rem; line-height: 1.65; margin: 0; max-width: 56ch; }
+</style>

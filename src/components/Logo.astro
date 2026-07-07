@@ -1,0 +1,64 @@
+---
+// The h11t labs wordmark, ported from the design's system page:
+// Poppins 800 italic for "h11t" (fused stems via negative margins + keyline
+// strokes), white h/t, amber 1s, upright 700 "labs", amber baseline period.
+//
+// size:  fixed pixel size.
+// fluid: ignore `size` and inherit --logo-size from the parent (used in the
+//        sidebar so the wordmark spans the full column width).
+interface Props {
+  size?: number;
+  fluid?: boolean;
+}
+const { size = 30, fluid = false } = Astro.props;
+const style = fluid ? undefined : `--logo-size:${size}px`;
+---
+
+<span class="logo" style={style} aria-label="h11t labs">
+  <span class="mark" aria-hidden="true">
+    <span class="g gh">h</span><span class="g g1">1</span><span class="g g1 g1b">1</span><span class="g gt">t</span>
+  </span>
+  <span class="labs" aria-hidden="true">labs</span><span class="dot" aria-hidden="true">.</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-logo);
+    line-height: 1;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .mark {
+    display: inline-flex;
+    font-style: italic;
+    font-weight: 800;
+    font-size: var(--logo-size, 30px);
+  }
+  /* fused stems + keyline strokes: stroke painted in bg colour under the fill */
+  .g {
+    color: var(--text);
+    -webkit-text-stroke: 2px var(--ink);
+    paint-order: stroke fill;
+  }
+  .g1 { color: var(--amber); }
+  .g1  { margin-left: -0.17em; }  /* ~0.75 overlap */
+  .g1b { margin-left: -0.2em; }
+  .gt  { margin-left: -0.13em; }
+
+  .labs {
+    font-style: normal;
+    font-weight: 700;
+    font-size: var(--logo-size, 30px);
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-left: 0.24em;
+  }
+  .dot {
+    font-style: normal;
+    font-weight: 800;
+    font-size: var(--logo-size, 30px);
+    color: var(--amber);
+  }
+</style>

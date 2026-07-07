@@ -1,0 +1,16 @@
+# build output
+dist/
+# generated types
+.astro/
+# deps
+node_modules/
+# env
+.env
+.env.production
+# macOS
+.DS_Store
+# design source (imported, not part of the site build)
+*.dc.html
+.gstack/
+# local editor / tooling config
+.claude/

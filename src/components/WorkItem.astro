@@ -1,0 +1,79 @@
+---
+import type { Project } from '../data/projects';
+import GithubIcon from './GithubIcon.astro';
+interface Props { project: Project; index: number; }
+const { project } = Astro.props;
+
+// Primary destination = "the project itself": a live url if it has one,
+// otherwise its write-up on this site.
+const hasUrl = Boolean(project.url);
+const primaryHref = project.url ?? (project.article ? `/writing/${project.article}` : project.repo ?? '#');
+---
+
+<article class="work">
+  <div class="work__body">
+    <header class="work__head">
+      <h3 class="work__title">{project.name}</h3>
+      <div class="work__meta"><span>{project.year}</span></div>
+    </header>
+
+    <p class="work__desc">
+      <span data-i18n-lang="en">{project.description}</span>
+      <span data-i18n-lang="nl">{project.descriptionNl}</span>
+    </p>
+
+    <div class="work__tags">
+      {project.tags.map((t) => <span class="tag">{t}</span>)}
+    </div>
+
+    <div class="work__actions">
+      <a class="btn btn--primary" href={primaryHref} {...hasUrl ? { target: '_blank', rel: 'noopener' } : {}}>
+        {hasUrl ? (
+          <><span data-i18n-lang="en">Visit project ↗</span><span data-i18n-lang="nl">Bekijk project ↗</span></>
+        ) : (
+          <><span data-i18n-lang="en">Read the write-up →</span><span data-i18n-lang="nl">Lees het verhaal →</span></>
+        )}
+      </a>
+      {project.repo && (
+        <a class="btn btn--gh" href={project.repo} target="_blank" rel="noopener"><GithubIcon /> GitHub</a>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .work {
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .work__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .work__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .work__meta {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--index);
+    text-align: right;
+  }
+  .work__desc { color: var(--muted); font-size: 1rem; line-height: 1.65; margin: 0 0 1.1rem; max-width: 54ch; }
+  .work__tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.3rem; }
+  .work__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+
+  @media (max-width: 560px) {
+    .work__head { flex-direction: column; gap: 0.3rem; }
+    .work__meta { text-align: left; }
+  }
+</style>

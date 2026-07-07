@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import WorkItem from '../../components/WorkItem.astro';
+import T from '../../components/T.astro';
+import { projects } from '../../data/projects';
+---
+
+<Base title="Work" description="Everything I built and actually use — from a one-file scraper to a full background-jobs stack, mostly Python. Some open source, some not.">
+  <section>
+    <p class="kicker">01 <span class="sep">—</span> <span class="on"><T en="projects" nl="projecten" /></span></p>
+    <h1 class="page-title"><T en="Projects" nl="Projecten" /></h1>
+    <p class="lede">
+      <T
+        en="Everything here I built and actually use — from a one-file scraper to a full background-jobs stack. Mostly Python, made because I wanted it to exist, not to ship a product. Some open source, some not."
+        nl="Alles hier heb ik zelf gebouwd en gebruik ik ook echt — van een scraper van één bestand tot een complete achtergrondtaken-stack. Meestal Python, gemaakt omdat ik wilde dat het bestond, niet om er een product van te maken. Sommige open source, andere niet."
+      />
+    </p>
+
+    <div class="list">
+      {projects.map((project, i) => <WorkItem project={project} index={i} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .list { margin-top: 2.5rem; }
+</style>

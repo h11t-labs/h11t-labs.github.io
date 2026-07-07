@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import T from '../components/T.astro';
+---
+
+<Base title="About" description="h11t labs is where I host and show my personal projects — mostly Python, from a one-file scraper to a full stack.">
+  <section class="about">
+    <p class="kicker">03 <span class="sep">—</span> <span class="on"><T en="about" nl="over" /></span></p>
+    <h1 class="page-title"><T en="About" nl="Over" /></h1>
+
+    <div class="prose">
+      <div data-i18n-lang="en">
+        <p>
+          I'm a developer in the Netherlands. h11t labs is my corner of the
+          internet — where I build the things I find exciting and show them.
+          Personal projects, made because I wanted them to exist, not to ship a
+          product.
+        </p>
+        <p>
+          I mostly reach for Python, and I keep ending up in data and
+          infrastructure — a scraper that hands me back a library catalog worth
+          searching, a background-jobs stack that lives in the database I already
+          run. Some are an afternoon's script, some are a whole system. When one's
+          worth explaining, I write it up in the <a href="/writing">writing</a>.
+        </p>
+        <p>
+          Open source when it makes sense, private when it doesn't. No trackers, no
+          newsletter, nothing after your email. I build them for myself first — but
+          if a piece turns out useful to you too, even better.
+        </p>
+      </div>
+      <div data-i18n-lang="nl">
+        <p>
+          Ik ben een developer uit Nederland. h11t labs is m'n eigen hoekje van het
+          internet — waar ik de dingen bouw die me boeien en ze laat zien.
+          Persoonlijke projecten, gemaakt omdat ik wilde dat ze bestonden, niet om
+          een product uit te brengen.
+        </p>
+        <p>
+          Ik pak meestal Python, en ik beland steeds weer in data en infrastructuur
+          — een scraper die me een catalogus teruggeeft waarin zoeken wél werkt, een
+          achtergrondtaken-stack die in de database draait die ik toch al heb.
+          Sommige zijn een middagje werk, andere een compleet systeem. Als iets het
+          uitleggen waard is, schrijf ik het op bij de <a href="/writing">artikelen</a>.
+        </p>
+        <p>
+          Open source waar dat zin heeft, privé waar dat niet zo is. Geen trackers,
+          geen nieuwsbrief, niks dat achter je e-mailadres aan zit. Ik bouw ze in de
+          eerste plaats voor mezelf — maar als jij er ook iets aan hebt, mooi
+          meegenomen.
+        </p>
+      </div>
+    </div>
+
+    <p class="about__links">
+      <a href="https://github.com/h11t-labs" target="_blank" rel="noopener">github →</a>
+      <a href="mailto:hi@h11t-labs.nl">mail →</a>
+      <a href="/rss.xml">rss →</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .about { max-width: 680px; }
+  .prose {
+    font-family: var(--font-prose);
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-top: 1.5rem;
+  }
+  .prose :global(p) { margin: 0 0 1.4rem; }
+  .prose :global(a) { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+  .about__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 2.5rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  .about__links a { color: var(--muted); }
+  .about__links a:hover { color: var(--amber); text-decoration: none; }
+</style>

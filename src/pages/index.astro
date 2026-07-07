@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkItem from '../components/WorkItem.astro';
+import WritingItem from '../components/WritingItem.astro';
+import T from '../components/T.astro';
+import { projects } from '../data/projects';
+import { getArticlePairs } from '../lib/articles';
+
+const articles = await getArticlePairs();
+---
+
+<Base>
+  <!-- 00 — home -->
+  <section class="statement">
+    <p class="kicker">00 <span class="sep">—</span> <T en="home" nl="home" /></p>
+    <h1 class="headline">
+      <T
+        en="My corner of the internet for the projects I find exciting."
+        nl="M'n hoekje van het internet voor de projecten waar ik enthousiast van word."
+      /><span class="cursor" aria-hidden="true"></span>
+    </h1>
+    <p class="lede">
+      <T
+        en="From a one-file scraper to a full background-jobs stack — personal projects, mostly Python, that I build for the itch of it and keep legible."
+        nl="Van een scraper van één bestand tot een complete achtergrondtaken-stack — persoonlijke projecten, meestal Python, gebouwd voor de lol en lekker overzichtelijk."
+      />
+    </p>
+  </section>
+
+  <!-- 01 — index / projects -->
+  <section class="index-block">
+    <header class="index-head">
+      <p class="kicker">01 <span class="sep">—</span> <span class="on"><T en="projects" nl="projecten" /></span></p>
+      <a class="index-more" href="/work"><T en="view all →" nl="bekijk alles →" /></a>
+    </header>
+    {projects.map((project, i) => <WorkItem project={project} index={i} />)}
+  </section>
+
+  <!-- 02 — index / writing -->
+  <section class="index-block">
+    <header class="index-head">
+      <p class="kicker">02 <span class="sep">—</span> <span class="on"><T en="writing" nl="artikelen" /></span></p>
+      <a class="index-more" href="/writing"><T en="view all →" nl="bekijk alles →" /></a>
+    </header>
+    {articles.map((a) => (
+      <WritingItem
+        slug={a.slug}
+        titleEn={a.en.data.title}
+        titleNl={(a.nl ?? a.en).data.title}
+        descEn={a.en.data.description}
+        descNl={(a.nl ?? a.en).data.description}
+        readMin={a.en.data.readMin}
+      />
+    ))}
+  </section>
+</Base>
+
+<style>
+  .statement { padding-bottom: 3.5rem; }
+  .headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.6vw, 2.9rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.18;
+    color: var(--text);
+    max-width: 20ch;
+    margin: 0 0 1.6rem;
+  }
+  .cursor {
+    display: inline-block;
+    width: 0.56em;
+    height: 0.92em;
+    background: var(--amber);
+    margin-left: 0.12em;
+    transform: translateY(0.1em);
+    animation: cursor-blink 1.05s step-end infinite;
+  }
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; }
+  }
+  .index-block { padding: 2.5rem 0; }
+  .index-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .index-head .kicker { margin: 0; }
+  .index-more { font-family: var(--font-mono); font-size: 0.8rem; color: var(--amber); }
+  .index-more:hover { text-decoration: none; opacity: 0.8; }
+</style>

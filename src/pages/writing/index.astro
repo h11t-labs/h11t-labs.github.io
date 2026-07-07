@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import WritingItem from '../../components/WritingItem.astro';
+import T from '../../components/T.astro';
+import { getArticlePairs } from '../../lib/articles';
+
+const articles = await getArticlePairs();
+---
+
+<Base title="Writing" description="Notes from the workbench — build logs, teardowns, and the occasional opinion about tooling.">
+  <section>
+    <p class="kicker">02 <span class="sep">—</span> <span class="on"><T en="writing" nl="artikelen" /></span></p>
+    <h1 class="page-title"><T en="Writing" nl="Artikelen" /></h1>
+    <p class="lede">
+      <T
+        en="Where I write up what I figured out building these — the good parts, the dead ends, and the odd strong opinion about tooling."
+        nl="Waar ik opschrijf wat ik ontdekte bij het bouwen — de leuke stukken, de doodlopende wegen en af en toe een uitgesproken mening over tooling."
+      />
+    </p>
+
+    <div class="list">
+      {articles.map((a) => (
+        <WritingItem
+          slug={a.slug}
+          titleEn={a.en.data.title}
+          titleNl={(a.nl ?? a.en).data.title}
+          descEn={a.en.data.description}
+          descNl={(a.nl ?? a.en).data.description}
+          readMin={a.en.data.readMin}
+        />
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .list { margin-top: 2.5rem; }
+</style>

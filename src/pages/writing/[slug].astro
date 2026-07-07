@@ -1,0 +1,29 @@
+---
+import { render } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+import { getArticlePairs } from '../../lib/articles';
+
+export async function getStaticPaths() {
+  const pairs = await getArticlePairs();
+  return pairs.map((p) => ({ params: { slug: p.slug }, props: p }));
+}
+
+const { en, nl } = Astro.props;
+const enRender = await render(en);
+const nlRender = nl ? await render(nl) : enRender;
+const EnBody = enRender.Content;
+const NlBody = nlRender.Content;
+---
+
+<Article
+  titleEn={en.data.title}
+  titleNl={(nl ?? en).data.title}
+  description={en.data.description}
+  pubDate={en.data.pubDate}
+  readMin={en.data.readMin}
+  tags={en.data.tags}
+  repo={en.data.repo}
+>
+  <EnBody slot="body-en" />
+  <NlBody slot="body-nl" />
+</Article>

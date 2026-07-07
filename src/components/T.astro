@@ -1,0 +1,7 @@
+---
+// Inline translatable text. Renders both language variants; CSS shows the one
+// that matches <html lang>. URLs never change — language is a client-side toggle.
+interface Props { en: string; nl: string; }
+const { en, nl } = Astro.props;
+---
+<span data-i18n-lang="en" set:text={en}></span><span data-i18n-lang="nl" set:text={nl}></span>

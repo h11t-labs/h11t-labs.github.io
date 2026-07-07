@@ -1,0 +1,108 @@
+---
+import Base from './Base.astro';
+import T from '../components/T.astro';
+import GithubIcon from '../components/GithubIcon.astro';
+
+interface Props {
+  titleEn: string;
+  titleNl: string;
+  description: string;
+  pubDate: Date;
+  readMin?: number;
+  tags?: string[];
+  repo?: string;
+}
+const { titleEn, titleNl, description, pubDate, readMin = 5, tags = [], repo } = Astro.props;
+
+const dateEn = pubDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+const dateNl = pubDate.toLocaleDateString('nl-NL', { year: 'numeric', month: 'long', day: 'numeric' });
+const iso = pubDate.toISOString().slice(0, 10);
+---
+
+<Base title={titleEn} description={description} type="article">
+  <article class="article">
+    <p class="kicker"><a href="/writing"><T en="writing" nl="artikelen" /></a></p>
+    <h1 class="page-title article__title">
+      <span data-i18n-lang="en">{titleEn}</span><span data-i18n-lang="nl">{titleNl}</span>
+    </h1>
+
+    <div class="article__meta">
+      <span>{readMin} min</span>
+      <span class="dot">·</span>
+      <span data-i18n-lang="en"><time datetime={iso}>{dateEn}</time></span><span data-i18n-lang="nl"><time datetime={iso}>{dateNl}</time></span>
+    </div>
+
+    {repo && (
+      <p class="article__repo">
+        <a class="btn btn--gh" href={repo} target="_blank" rel="noopener">
+          <GithubIcon /> <T en="view on github" nl="bekijk op github" />
+        </a>
+      </p>
+    )}
+
+    <div class="prose">
+      <div data-i18n-lang="en"><slot name="body-en" /></div>
+      <div data-i18n-lang="nl"><slot name="body-nl" /></div>
+    </div>
+
+    {tags.length > 0 && (
+      <footer class="article__tags">
+        {tags.map((t) => <span class="tag">{t}</span>)}
+      </footer>
+    )}
+
+    <p class="article__back"><a href="/writing"><T en="← all writing" nl="← alle artikelen" /></a></p>
+  </article>
+</Base>
+
+<style>
+  .article { max-width: 680px; }
+  .article__title { font-size: clamp(2.1rem, 5vw, 3.1rem); margin-bottom: 1.1rem; }
+  .article__meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--index);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.6rem;
+  }
+  .article__meta .dot { color: var(--index); }
+  .article__repo { margin: 0 0 2.4rem; }
+
+  .article__tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 3rem; padding-top: 1.6rem; border-top: 1px solid var(--border); }
+  .article__back { margin-top: 1.6rem; font-family: var(--font-mono); font-size: 0.82rem; }
+
+  /* long-form prose — Source Serif 4, the design's proseFont */
+  .prose { font-family: var(--font-prose); font-size: 1.18rem; line-height: 1.72; color: var(--text); }
+  .prose :global(p) { margin: 0 0 1.3rem; }
+  .prose :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 2.6rem 0 0.9rem;
+  }
+  .prose :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1.18rem; font-weight: 600;
+    margin: 2rem 0 0.6rem;
+  }
+  .prose :global(a) { color: var(--link); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); }
+  .prose :global(strong) { color: var(--text); font-weight: 600; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.3rem; margin: 0 0 1.3rem; }
+  .prose :global(li) { margin: 0.4rem 0; }
+  .prose :global(li)::marker { color: var(--amber); }
+  .prose :global(blockquote) {
+    margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.1rem;
+    border-left: 2px solid var(--amber);
+    color: var(--muted);
+  }
+  .prose :global(code) { font-size: 0.82em; }
+  .prose :global(pre) { margin: 1.6rem 0; font-family: var(--font-mono); }
+  .prose :global(hr) { margin: 2.4rem 0; }
+  .prose :global(img) { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+  .prose :global(table) { display: block; overflow-x: auto; width: 100%; border-collapse: collapse; font-family: var(--font-display); font-size: 0.95rem; margin: 1.6rem 0; }
+  .prose :global(th), .prose :global(td) { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .prose :global(th) { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+</style>

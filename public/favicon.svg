@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <style>
+    .tile { fill: #0f1115; }
+    .ht   { fill: #e8ebef; }
+    @media (prefers-color-scheme: light) {
+      .tile { fill: #faf9f6; }
+      .ht   { fill: #17191d; }
+    }
+  </style>
+  <rect class="tile" width="32" height="32" rx="8"/>
+  <!-- the "h11t" mark from the wordmark: white h/t, amber 1s, bold italic -->
+  <text x="16.3" y="22.6" text-anchor="middle"
+        font-family="Poppins, 'Space Grotesk', Arial, sans-serif"
+        font-size="17" font-weight="800" font-style="italic" letter-spacing="-0.6">
+    <tspan class="ht">h</tspan><tspan fill="#f4a838">11</tspan><tspan class="ht">t</tspan>
+  </text>
+</svg>
