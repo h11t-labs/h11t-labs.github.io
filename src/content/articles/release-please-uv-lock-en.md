@@ -37,16 +37,22 @@ The nasty part: it's green on every feature PR — no version change there — a
 blows up on the **release**, right when you're trying to ship. If your deploy is gated
 on that CI job, nothing goes out.
 
-## The workarounds you reach for first
+## Two ways out
 
-- **`uv sync --frozen`** instead of `--locked`. It works, and it's what a lot of
-  Dockerfiles already do. But now the lock's version pin lags the real version forever
-  (cosmetic, but it reads like a bug), and you've dropped the `--locked` check that
-  catches "someone changed a dependency but forgot to re-lock."
-- **Commit the lock by hand every release.** Tedious and easy to forget.
+The honest, simple option is **`uv sync --frozen`** instead of `--locked`. It uses the
+lockfile exactly as committed, so it doesn't care that the version pin drifted — and it's
+already what most Dockerfiles do. You give up two things: the `--locked` check that
+catches "someone edited a dependency but forgot to re-lock" (though `uv add`/`uv remove`
+keep the lock in sync anyway, and a genuinely missing dependency still fails your tests),
+and the lock's version pin now trails the real version by a release (cosmetic, but it
+reads like a bug). For plenty of projects that's a perfectly reasonable trade — and if you
+take it, you can stop reading here.
 
-Neither is great. What you actually want is for the release PR to already contain the
-bumped `uv.lock`.
+The catch worth knowing: this drift doesn't only hit the release commit. Once a release
+merges, `main` has the new `pyproject.toml` version next to the old `uv.lock` pin, so the
+**next feature PR** fails `uv sync --locked` too. So if you want `--locked` to keep
+working anywhere, *something* has to bump `uv.lock` when the version bumps. The clean place
+to do that is the release PR itself.
 
 ## The fix: sync uv.lock inside the release PR
 
@@ -107,6 +113,12 @@ So the script asserts the diff is **exactly one line changed**, that the added l
 `version = "x.y.z"` pin, and that it sits next to your project's `name`. Anything else →
 **fail the job loudly**. A real dependency change then gets its own `chore(deps)` PR,
 where it belongs, instead of hiding inside a release.
+
+The trade-off: when the guard trips, it **blocks the release** until you land that
+`chore(deps)` PR. In practice it rarely fires — a plain `uv lock` doesn't upgrade
+already-pinned dependencies, so on a version-only bump the diff really is that one line —
+but it's deliberate strictness, not a free lunch. If you'd rather let dependency bumps ride
+along, drop the guard; just know what you're trading away.
 
 ## One gotcha about tokens
 

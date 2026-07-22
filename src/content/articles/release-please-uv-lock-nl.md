@@ -9,9 +9,9 @@ repo: https://github.com/h11t-labs/kobo2readwise
 tags: ["release-please", "uv", "github-actions", "ci-cd", "python"]
 ---
 
-Versie je een Python-project met [release-please](https://github.com/googleapis/release-please)
-en lock je dependencies met [uv](https://docs.astral.sh/uv/), dan zit er een klein valletje
-in dat pas op het slechtst denkbare moment tevoorschijn komt — de release-commit zelf.
+Versioneer je een Python-project met [release-please](https://github.com/googleapis/release-please)
+en lock je dependencies met [uv](https://docs.astral.sh/uv/), dan zit er een kleine valkuil
+in die pas op het slechtst denkbare moment tevoorschijn komt — de release-commit zelf.
 
 ## Het probleem
 
@@ -37,16 +37,22 @@ Het venijnige: op elke feature-PR is het groen — daar verandert de versie niet
 klapt pas op de **release**, precies als je wilt shippen. Zit je deploy achter die
 CI-job, dan gaat er niets naar buiten.
 
-## De workarounds die je eerst probeert
+## Twee uitwegen
 
-- **`uv sync --frozen`** in plaats van `--locked`. Werkt, en het is wat veel Dockerfiles
-  al doen. Maar nu loopt de version-pin in de lock voor altijd achter op de echte versie
-  (cosmetisch, maar het leest als een bug), en je bent de `--locked`-check kwijt die
-  "iemand wijzigde een dependency maar vergat te herlocken" opvangt.
-- **De lock elke release met de hand committen.** Bewerkelijk en makkelijk te vergeten.
+De eerlijke, simpele optie is **`uv sync --frozen`** in plaats van `--locked`. Die gebruikt
+de lockfile precies zoals-ie gecommit is, dus het maakt niet uit dat de version-pin
+achterloopt — en het is al wat de meeste Dockerfiles doen. Je levert twee dingen in: de
+`--locked`-check die "iemand wijzigde een dependency maar vergat te herlocken" vangt (al
+houden `uv add`/`uv remove` de lock sowieso in sync, en een écht ontbrekende dependency
+laat je tests alsnog falen), en de version-pin in de lock loopt nu één release achter
+(cosmetisch, maar het leest als een bug). Voor veel projecten is dat een prima ruil — en
+neem je die, dan kun je hier stoppen met lezen.
 
-Geen van beide is fijn. Wat je eigenlijk wilt: de release-PR bevat de gebumpte `uv.lock`
-al.
+Het addertje: die drift raakt niet alleen de release-commit. Zodra een release merget,
+staat op `main` de nieuwe `pyproject.toml`-versie naast de oude `uv.lock`-pin, dus de
+**volgende feature-PR** faalt óók op `uv sync --locked`. Wil je `--locked` ergens laten
+werken, dan móét *iets* `uv.lock` meebumpen bij de versie-bump. De nette plek daarvoor is
+de release-PR zelf.
 
 ## De fix: sync uv.lock binnen de release-PR
 
@@ -109,6 +115,12 @@ toegevoegde regel een `version = "x.y.z"`-pin is, en dat die naast de `name` van
 project staat. Alles daarbuiten → **laat de job luid falen**. Een echte
 dependency-wijziging krijgt dan z'n eigen `chore(deps)`-PR, waar-ie hoort, in plaats van
 te verstoppen in een release.
+
+De ruil: als de guard afgaat, **blokkeert-ie de release** tot je die `chore(deps)`-PR hebt
+gemerged. In de praktijk gebeurt dat zelden — een kale `uv lock` upgrade't al gepinde
+dependencies niet, dus bij een versie-only bump ís de diff echt die ene regel — maar het
+is bewuste strengheid, geen gratis lunch. Wil je dependency-bumps liever laten meeliften,
+laat de guard dan weg; weet alleen wat je inlevert.
 
 ## Eén valkuil met tokens
 
